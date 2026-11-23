@@ -47,6 +47,7 @@ def collect():
         access = token()
     except Exception as exc:
         result["errors"].append("Autenticação: " + str(exc))
+        result["status"] = "error"
         return result
     headers = {"Authorization":"Bearer " + access,
                "X-EBAY-C-MARKETPLACE-ID":"EBAY_US", "Accept":"application/json"}
