@@ -1,0 +1,22 @@
+name: Test official NUC collector
+on:
+  pull_request:
+    paths:
+      - 'scripts/collect_official_test.py'
+      - 'tests/test_official_collector.py'
+      - '.github/workflows/test-official-collector.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Python syntax
+        run: python -m py_compile scripts/collect_official_test.py
+      - name: Run tests without external access
+        run: python -m unittest discover -s tests -p 'test_official_collector.py' -v
