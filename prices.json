@@ -1,7 +1,14 @@
 {
-  "checked_at": null,
-  "status": "pending",
+  "checked_at": "2026-11-23T18:33:43.979635+00:00",
+  "status": "unavailable",
   "source": "eBay US public listings (experimental)",
   "offers": [],
-  "errors": []
+  "errors": [
+    "32 GB / 2 TB — montado: HTTP Error 403: Forbidden",
+    "64 GB / 2 TB — montado: HTTP Error 403: Forbidden",
+    "Barebone: HTTP Error 403: Forbidden",
+    "64 GB RAM: HTTP Error 403: Forbidden",
+    "32 GB RAM: HTTP Error 403: Forbidden",
+    "SSD 2 TB: HTTP Error 403: Forbidden"
+  ]
 }
