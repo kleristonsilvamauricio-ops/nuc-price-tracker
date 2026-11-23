@@ -3,7 +3,9 @@ on:
   pull_request:
     paths:
       - 'scripts/collect_official_test.py'
+      - 'scripts/collect_bestbuy_test.py'
       - 'tests/test_official_collector.py'
+      - 'tests/test_bestbuy_collector.py'
       - '.github/workflows/test-official-collector.yml'
   workflow_dispatch:
 permissions:
@@ -17,6 +19,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Validate Python syntax
-        run: python -m py_compile scripts/collect_official_test.py
+        run: python -m py_compile scripts/collect_official_test.py scripts/collect_bestbuy_test.py
       - name: Run tests without external access
-        run: python -m unittest discover -s tests -p 'test_official_collector.py' -v
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
