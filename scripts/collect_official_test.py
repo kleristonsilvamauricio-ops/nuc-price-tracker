@@ -4,15 +4,11 @@ Requires EBAY_CLIENT_ID and EBAY_CLIENT_SECRET as GitHub Actions secrets.
 """
 import base64, datetime, json, os, urllib.parse, urllib.request
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-QUERIES = {
-    "32 GB / 2 TB — montado": "ASUS NUC 15 Pro Plus 285H 32GB 2TB",
-    "64 GB / 2 TB — montado": "ASUS NUC 15 Pro Plus 285H 64GB 2TB",
-    "Barebone": "ASUS NUC 15 Pro Plus 285H barebone",
-    "64 GB RAM": "64GB DDR5 5600 SODIMM 2x32",
-    "32 GB RAM": "32GB DDR5 5600 SODIMM 2x16",
-    "SSD 2 TB": "2TB M.2 2280 NVMe SSD",
-}
+from scripts.offer_validation import QUERIES, valid, price_ok, safe_url, error_code, status
+
 
 def request_json(url, headers, data=None):
     req = urllib.request.Request(url, data=data, headers=headers)
@@ -32,12 +28,6 @@ def token():
           "scope":"https://api.ebay.com/oauth/api_scope"}).encode()
     )["access_token"]
 
-def valid(title, category):
-    low = title.lower()
-    if category in ("Barebone", "32 GB / 2 TB — montado", "64 GB / 2 TB — montado"):
-        return "285h" in low and "nuc" in low
-    return True
-
 def collect():
     now = datetime.datetime.now(datetime.timezone.utc).isoformat()
     result = {"checked_at": now, "status":"unavailable",
@@ -46,7 +36,7 @@ def collect():
     try:
         access = token()
     except Exception as exc:
-        result["errors"].append("Autenticação: " + str(exc))
+        result["errors"].append("Autenticação: " + error_code(exc))
         result["status"] = "error"
         return result
     headers = {"Authorization":"Bearer " + access,
@@ -61,25 +51,26 @@ def collect():
                 title = item.get("title", "")
                 if price.get("currency") != "USD" or not valid(title,category):
                     continue
-                amount = float(price.get("value",0))
+                if not price_ok(price.get("value")) or not safe_url(item.get("itemWebUrl"), "ebay.com") or item.get("conditionId") != "1000" or not item.get("seller", {}).get("username"):
+                    continue
+                amount = float(price["value"])
                 if not 20 < amount < 10000:
                     continue
                 result["offers"].append({
                     "category":category,"title":title[:180],
                     "price_usd":amount,"url":item.get("itemWebUrl",""),
                     "seller":item.get("seller",{}).get("username","eBay seller"),
-                    "verified_at":now})
+                    "verified_at":now, "item_id":item.get("itemId"), "compatibility_verified":False, "availability_verified":False})
         except Exception as exc:
-            result["errors"].append(category + ": " + str(exc)[:160])
-    result["offers"].sort(key=lambda x:x["price_usd"])
-    result["offers"] = result["offers"][:80]
-    result["status"] = "results" if result["offers"] else (
-        "error" if result["errors"] else "no_results")
+            result["errors"].append(category + ": " + error_code(exc))
+    result["offers"] = sorted(result["offers"], key=lambda x: (x["category"], x["price_usd"]))
+    result["offers"] = [o for cat in QUERIES for o in [x for x in result["offers"] if x["category"] == cat][:15]]
+    result["status"] = status(result["offers"], result["errors"], len(QUERIES))
     return result
 
 if __name__ == "__main__":
     output = collect()
     Path("prices-test.json").write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n")
     print(output["status"],len(output["offers"]),"offers;",len(output["errors"]),"errors")
-    if output["status"] == "error":
+    if output["status"] not in ("results", "no_results"):
         raise SystemExit(1)
