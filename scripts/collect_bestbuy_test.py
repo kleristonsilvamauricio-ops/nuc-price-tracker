@@ -6,12 +6,10 @@ import os
 import urllib.parse
 import urllib.request
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-QUERIES = {
-    "NUC 285H": "285H",
-    "RAM 32 GB": "DDR5 SODIMM",
-    "SSD 2 TB": "2TB SSD",
-}
+from scripts.offer_validation import QUERIES, valid, price_ok, safe_url, error_code, status
 
 def collect(api_key=None, fetch=None):
     now = datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -37,33 +35,22 @@ def collect(api_key=None, fetch=None):
             data = fetch(url)
             for item in data.get("products",[]):
                 title = item.get("name","")
-                if category == "NUC 285H" and not (
-                    "285h" in title.lower() and "nuc" in title.lower()
-                ):
-                    continue
-                if category == "RAM 32 GB" and not (
-                    "sodimm" in title.lower() or "so-dimm" in title.lower()
-                ):
-                    continue
-                if category == "SSD 2 TB" and not (
-                    "2tb" in title.lower() or "2 tb" in title.lower()
-                ):
+                if not valid(title, category) or item.get("onlineAvailability") is not True or not safe_url(item.get("url"), "bestbuy.com"):
                     continue
                 price = item.get("salePrice")
-                if not isinstance(price,(float,int)) or price <= 0:
+                if not price_ok(price):
                     continue
                 out["offers"].append({
-                    "category":category,"title":title,"price_usd":price,
+                    "category":category,"title":title,"price_usd":float(price),
                     "url":item.get("url",""),"sku":item.get("sku"),
                     "seller":"Best Buy","verified_at":now,
                     "online_available":item.get("onlineAvailability"),
                     "compatibility_verified":False})
         except Exception as exc:
-            out["errors"].append(category+": "+str(exc)[:150])
+            out["errors"].append(category+": "+error_code(exc))
     out["offers"].sort(key=lambda x:x["price_usd"])
-    out["status"] = ("results" if out["offers"] else
-                     "partial_error" if out["errors"] and len(out["errors"])<len(QUERIES)
-                     else "error" if out["errors"] else "no_results")
+    out["offers"] = [o for cat in QUERIES for o in [x for x in out["offers"] if x["category"] == cat][:15]]
+    out["status"] = status(out["offers"], out["errors"], len(QUERIES))
     return out
 
 if __name__ == "__main__":
@@ -71,5 +58,5 @@ if __name__ == "__main__":
     Path("prices-bestbuy-test.json").write_text(
         json.dumps(result,ensure_ascii=False,indent=2)+"\n")
     print(result["status"],len(result["offers"]),"offers")
-    if result["status"]=="error":
+    if result["status"] not in ("results", "no_results"):
         raise SystemExit(1)
