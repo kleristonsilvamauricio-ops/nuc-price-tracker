@@ -1,12 +1,6 @@
 name: Test official NUC collector
 on:
   pull_request:
-    paths:
-      - 'scripts/collect_official_test.py'
-      - 'scripts/collect_bestbuy_test.py'
-      - 'tests/test_official_collector.py'
-      - 'tests/test_bestbuy_collector.py'
-      - '.github/workflows/test-official-collector.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,3 +16,38 @@ jobs:
         run: python -m py_compile scripts/collect_official_test.py scripts/collect_bestbuy_test.py
       - name: Run tests without external access
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+
+  live-api-tests:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/test/official-api-collector'
+    needs: offline-tests
+    runs-on: ubuntu-latest
+    environment: api-validation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: eBay real API
+        env:
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+        run: python scripts/collect_official_test.py
+      - name: Best Buy real API
+        if: always()
+        env:
+          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
+        run: python scripts/collect_bestbuy_test.py
+      - name: Summarize without storing catalog
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from collections import Counter
+          for name in ("prices-test.json", "prices-bestbuy-test.json"):
+              p = Path(name)
+              if p.exists():
+                  d = json.loads(p.read_text())
+                  print(name, d["status"], dict(Counter(o["category"] for o in d["offers"])), "errors:", len(d["errors"]))
+                  p.unlink()
+          PY
