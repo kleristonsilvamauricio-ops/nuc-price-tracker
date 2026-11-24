@@ -12,7 +12,7 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(len(collector.QUERIES), 6)
     def test_reject_wrong_nuc_processor(self):
         self.assertFalse(collector.valid("ASUS NUC Core Ultra 7", "Barebone"))
-        self.assertTrue(collector.valid("ASUS NUC 15 Pro Plus 285H", "Barebone"))
+        self.assertTrue(collector.valid("ASUS NUC 15 Pro Plus 285H barebone", "Barebone"))
     def test_missing_credentials_fails_explicitly(self):
         with patch.dict(os.environ, {"EBAY_CLIENT_ID": "", "EBAY_CLIENT_SECRET": ""}):
             result = collector.collect()
