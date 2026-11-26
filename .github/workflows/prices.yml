@@ -1,26 +1,70 @@
-name: Consultar ofertas NUC
+name: Atualizar câmbio e estado das fontes
+
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/universal_status.py
+      - .github/workflows/prices.yml
   schedule:
-    - cron: '7 11,16,21 * * *'
+    # Brasília UTC-3: 13h07 e 18h07, apenas câmbio e estado das fontes.
+    # O prazo da campanha NUC continua separado em nuc_campaign.until.
+    - cron: '7 16,21 * * *'
+
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: universal-public-data
+  cancel-in-progress: false
+
 jobs:
-  collect:
+  public-data:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Collect public listings
-        run: python scripts/collect.py
-      - name: Save results
+      - name: Test public-data code without network
+        run: python -m unittest discover -s tests -p 'test_universal_status.py' -v
+      - name: Update reference FX and integration status
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            python scripts/universal_status.py --event schedule
+          elif [ "$EVENT_NAME" = "push" ]; then
+            python scripts/universal_status.py --event push
+          else
+            python scripts/universal_status.py --event manual
+          fi
+      - name: Save only public status and reference FX
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices.json
+          git add data/automation-status.json data/exchange.json
           if ! git diff --cached --quiet; then
-            git commit -m "Update NUC price data"
-            git push
+            git commit -m "Refresh public FX and integration status"
+            git push origin HEAD:main
           fi
+      - name: Summarize actual work
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          e = json.loads(Path('data/exchange.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('## Atualização pública\n\n')
+              out.write('Câmbio: **' + e['status'] + '**. Data de referência: ' + str(e['reference_date']) + '.\n\n')
+              out.write('Nenhuma consulta de preço de loja foi realizada. O catálogo pessoal não foi enviado.\n\n')
+              out.write('O aplicativo consulta os JSONs públicos na branch main; a atualização não depende de novo build do Pages.\n')
+          PY

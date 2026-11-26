@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "checked_at": "2026-11-26T17:53:49+00:00",
+  "last_success_at": null,
+  "schedule": {
+    "kind": "reference_data",
+    "timezone": "America/Fortaleza",
+    "times": [
+      "13:07",
+      "18:07"
+    ],
+    "until": null,
+    "active": true,
+    "detail": "Câmbio e estado das fontes são atualizados duas vezes por dia. GitHub Actions pode atrasar. Esta rotina não consulta preços de lojas."
+  },
+  "nuc_campaign": {
+    "timezone": "America/Fortaleza",
+    "times": [
+      "08:07",
+      "13:07",
+      "18:07"
+    ],
+    "until": "2026-11-30",
+    "active": true,
+    "price_polling_enabled": false,
+    "detail": "Prazo original do acompanhamento do NUC. A campanha de preços não foi prorrogada; a coleta das lojas continua pendente de integração."
+  },
+  "sources": [
+    {
+      "id": "amazon-br",
+      "name": "Amazon Brasil",
+      "country": "BR",
+      "state": "manual",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
+    },
+    {
+      "id": "mercado-livre",
+      "name": "Mercado Livre",
+      "country": "BR",
+      "state": "manual",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
+    },
+    {
+      "id": "kabum",
+      "name": "KaBuM!",
+      "country": "BR",
+      "state": "manual",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
+    },
+    {
+      "id": "amazon-us",
+      "name": "Amazon EUA",
+      "country": "US",
+      "state": "manual",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
+    },
+    {
+      "id": "bh",
+      "name": "B&H",
+      "country": "US",
+      "state": "manual",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
+    },
+    {
+      "id": "newegg",
+      "name": "Newegg",
+      "country": "US",
+      "state": "manual",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
+    },
+    {
+      "id": "ebay",
+      "name": "eBay EUA",
+      "country": "US",
+      "state": "pending_config",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "API oficial exige acesso de produção e validação real. A coleta pública anterior retornou HTTP 403 e não é executada pela v2."
+    },
+    {
+      "id": "bestbuy",
+      "name": "Best Buy",
+      "country": "US",
+      "state": "pending_config",
+      "checked_at": "2026-11-26T17:53:49+00:00",
+      "last_success_at": null,
+      "price_requests_this_run": 0,
+      "detail": "API oficial exige chave e validação real. Catálogo da API não é gravado no repositório público nem em backup permanente."
+    }
+  ],
+  "exchange": {
+    "state": "ready",
+    "last_success_at": "2026-11-26T17:41:37+00:00",
+    "reference_date": "2026-11-26",
+    "detail": "PTAX venda, referência oficial. A data da cotação é preservada em caso de falha."
+  },
+  "privacy": {
+    "local_catalog": true,
+    "private_data_uploaded": false
+  },
+  "counters": {
+    "price_requests_this_run": 0,
+    "exchange_requests_this_run": 1
+  },
+  "detail": "Verificação de configuração não comprova coleta de ofertas. Preços pessoais permanecem no navegador."
+}
