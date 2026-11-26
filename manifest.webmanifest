@@ -1,1 +1,22 @@
-{"name":"NUC Price Tracker","short_name":"NUC Tracker","start_url":"./","scope":"./","display":"standalone","background_color":"#f3f6fb","theme_color":"#12335b","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "id":"./",
+  "name":"Price Tracker Universal",
+  "short_name":"Price Tracker",
+  "description":"Produtos, preços e montagens no Brasil e nos Estados Unidos.",
+  "lang":"pt-BR",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f2f5f9",
+  "theme_color":"#12335b",
+  "icons":[
+    {"src":"./assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"},
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}
+  ],
+  "shortcuts":[
+    {"name":"Adicionar produto","url":"./?action=new","icons":[{"src":"./assets/icon-192.png","sizes":"192x192"}]},
+    {"name":"Comparar montagens","url":"./#compare","icons":[{"src":"./assets/icon-192.png","sizes":"192x192"}]}
+  ],
+  "share_target":{"action":"./","method":"GET","enctype":"application/x-www-form-urlencoded","params":{"title":"share_title","text":"share_text","url":"share_url"}}
+}

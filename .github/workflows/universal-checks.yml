@@ -1,0 +1,35 @@
+name: Validate Price Tracker Universal
+
+on:
+  push:
+    branches: [main, feature/universal-v2]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universal-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Domain and data safety tests
+        run: node --test tests/*.test.mjs
+      - name: Offline public-data tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Python syntax
+        run: python -m compileall -q scripts
+      - name: Static app integrity
+        run: python scripts/validate_static.py
