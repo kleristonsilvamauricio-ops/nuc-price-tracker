@@ -5,12 +5,12 @@
   "rate": 5.7446,
   "reference_date": "2026-11-26",
   "observed_at": "2026-11-26T16:11:27+00:00",
-  "checked_at": "2026-11-26T18:01:44+00:00",
-  "last_success_at": "2026-11-26T18:01:44+00:00",
+  "checked_at": "2026-11-27T03:37:03+00:00",
+  "last_success_at": "2026-11-27T03:37:03+00:00",
   "status": "ready",
   "source": {
     "name": "Banco Central do Brasil · PTAX venda",
-    "url": "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@dataInicial='11-16-2026'&@dataFinalCotacao='11-26-2026'&$top=1&$orderby=dataHoraCotacao%20desc&$format=json",
+    "url": "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@dataInicial='11-17-2026'&@dataFinalCotacao='11-27-2026'&$top=1&$orderby=dataHoraCotacao%20desc&$format=json",
     "dataset": "https://dadosabertos.bcb.gov.br/dataset/dolar-americano-usd-todos-os-boletins-diarios",
     "license": "ODbL"
   },
