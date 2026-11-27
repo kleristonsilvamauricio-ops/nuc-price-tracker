@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checked_at": "2026-11-27T03:37:03+00:00",
+  "checked_at": "2026-11-27T23:59:57+00:00",
   "last_success_at": null,
   "schedule": {
     "kind": "reference_data",
@@ -31,7 +31,7 @@
       "name": "Amazon Brasil",
       "country": "BR",
       "state": "manual",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
@@ -41,7 +41,7 @@
       "name": "Mercado Livre",
       "country": "BR",
       "state": "manual",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
@@ -51,7 +51,7 @@
       "name": "KaBuM!",
       "country": "BR",
       "state": "manual",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
@@ -61,7 +61,7 @@
       "name": "Amazon EUA",
       "country": "US",
       "state": "manual",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
@@ -71,7 +71,7 @@
       "name": "B&H",
       "country": "US",
       "state": "manual",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
@@ -81,7 +81,7 @@
       "name": "Newegg",
       "country": "US",
       "state": "manual",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "Links e cotações manuais disponíveis; sem coleta automática habilitada."
@@ -91,7 +91,7 @@
       "name": "eBay EUA",
       "country": "US",
       "state": "pending_config",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "API oficial exige acesso de produção e validação real. A coleta pública anterior retornou HTTP 403 e não é executada pela v2."
@@ -101,7 +101,7 @@
       "name": "Best Buy",
       "country": "US",
       "state": "pending_config",
-      "checked_at": "2026-11-27T03:37:03+00:00",
+      "checked_at": "2026-11-27T23:59:57+00:00",
       "last_success_at": null,
       "price_requests_this_run": 0,
       "detail": "API oficial exige chave e validação real. Catálogo da API não é gravado no repositório público nem em backup permanente."
@@ -109,8 +109,8 @@
   ],
   "exchange": {
     "state": "ready",
-    "last_success_at": "2026-11-27T03:37:03+00:00",
-    "reference_date": "2026-11-26",
+    "last_success_at": "2026-11-27T23:59:57+00:00",
+    "reference_date": "2026-11-27",
     "detail": "PTAX venda, referência oficial. A data da cotação é preservada em caso de falha."
   },
   "privacy": {
